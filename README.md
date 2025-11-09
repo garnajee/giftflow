@@ -1,6 +1,6 @@
 # GiftFlow
 
-A self-hosted, modern, and collaborative web application for managing gift ideas, purchases, and reimbursement tracking among a group of members.
+A self-hosted, modern, mobile-friendly web application for managing gift ideas, purchases, and reimbursement tracking among a group of members.
 
 ## Visual Overview
 
@@ -50,9 +50,12 @@ A self-hosted, modern, and collaborative web application for managing gift ideas
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
+  - [Installation & Deployment](#installation--deployment)
 - [Project Structure](#project-structure)
-- [API Endpoints](#api-endpoints)
+- [API Usage & Endpoints](#api-usage--endpoints)
+  - [Authentication](#authentication)
+  - [Example Requests](#example-requests)
+  - [Endpoint List](#endpoint-list)
 - [License](#license)
 
 ## Overview
@@ -69,6 +72,7 @@ The entire application is containerized with Docker, making deployment and manag
 -   **Full CRUD Operations**: Create, Read, Update, and Delete both ideas and purchased gifts.
 -   **Historical Archives**: Gifts from previous years are automatically archived and can be browsed by year and by person.
 -   **Multi-language Support (i18n)**: The interface is translated using JSON files, with the default language configurable at deployment. (Currently supports English & French).
+-   **Secure by Default**: API endpoints are protected by Basic Authentication.
 -   **Responsive Design**: A mobile-first approach ensures a seamless experience on any device.
 -   **Self-Hosted & Private**: Your data stays on your server.
 
@@ -110,7 +114,7 @@ You need to have Docker and Docker Compose installed on your machine.
     -   Change the `DEFAULT_LANG` environment variable to your preferred default language (`fr` or `en`).
     ```yaml
     environment:
-      - DEFAULT_LANG=fr
+      - DEFAULT_LANG=en
     ```
 
 4.  **Build and run the application:**
@@ -151,13 +155,47 @@ You need to have Docker and Docker Compose installed on your machine.
 └── style.css
 ```
 
-## API Endpoints
+## API Usage & Endpoints
 
-The backend provides the following RESTful endpoints:
+### Authentication
 
--   `GET /api/data`: Fetches all application data (members, ideas, gifts, statuses).
+All endpoints under `/api/` are protected using **HTTP Basic Authentication**. You must provide valid user credentials (defined in `data/users.json`) with every request.
+
+The frontend application handles this automatically after a successful login. For direct API interaction (e.g., with `curl`), you need to include the credentials.
+
+### Example Requests
+
+Here are some examples using `curl`. Replace `Alice:alice` with valid credentials from your `users.json` file.
+
+**1. Get All Data (GET)**
+```bash
+curl -u "Alice:alice" http://localhost:8080/api/data
+```
+
+**2. Add a New Gift Idea (POST)**
+```bash
+curl -u "Alice:alice" \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "A good book",
+    "estimatedPrice": 25,
+    "targetMemberId": 2,
+    "creatorId": 1
+  }' \
+  http://localhost:8080/api/ideas
+```
+
+**3. Delete a Purchased Gift (DELETE)**
+```bash
+curl -u "Alice:alice" -X DELETE http://localhost:8080/api/gifts/201
+```
+
+### Endpoint List
+
+-   `GET /api/data`: Fetches all application data.
 -   `POST /api/ideas`: Creates a new gift idea.
--   `PUT /api/ideas/:id`: Updates an existing gift idea (e.g., its price).
+-   `PUT /api/ideas/:id`: Updates an existing gift idea.
 -   `DELETE /api/ideas/:id`: Deletes a gift idea.
 -   `POST /api/gifts`: Creates a new purchased gift.
 -   `PUT /api/gifts/:id`: Updates an existing purchased gift.

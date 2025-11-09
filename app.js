@@ -1,14 +1,41 @@
+/**
+ * GiftFlow - Main Application Logic
+ * This file handles the entire frontend logic for the GiftFlow application,
+ * including state management, API communication, rendering, and event handling.
+ * It uses a simple i18n system for translations and Basic Auth for API requests.
+ */
 document.addEventListener('DOMContentLoaded', () => {
+	// --- STATE & CONSTANTS ---
 	let DB = {};
 	const state = {
+		authHeader: null,
 		currentUser: null,
 		currentView: 'dashboard',
 		viewingMemberId: null,
 		selectedArchiveYear: null,
-		selectedArchiveMemberId: null
+		selectedArchiveMemberId: null,
 	};
 	const translations = {};
 	let currentLang = 'fr';
+
+	// --- DOM SELECTORS ---
+	const loginContainer = document.getElementById('login-container');
+	const appContainer = document.getElementById('app-container');
+	const mainContent = document.getElementById('main-content');
+	const loginForm = document.getElementById('login-form');
+	const loginError = document.getElementById('login-error');
+	const currentUserSpan = document.getElementById('current-user-name');
+	const logoutBtn = document.getElementById('logout-btn');
+	const navDashboard = document.getElementById('nav-dashboard');
+	const navArchives = document.getElementById('nav-archives');
+	const navLogo = document.getElementById('nav-logo');
+	const addFab = document.getElementById('add-fab');
+	const modal = document.getElementById('add-modal');
+	const closeModalBtn = document.querySelector('.close-button');
+	const addForm = document.getElementById('add-form');
+	const modalTypeSelector = document.getElementById('modal-type-selector');
+
+	// --- UTILITY FUNCTIONS ---
 	const findById = (collection, id) => collection.find(item => item.id === id);
 	const formatCurrency = (amount) => new Intl.NumberFormat(currentLang, {
 		style: 'currency',
@@ -19,6 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		month: 'long',
 		year: 'numeric'
 	});
+
+	// --- i18n / TRANSLATION ENGINE ---
 	const t = (key, params = {}) => {
 		let text = key.split('.').reduce((obj, i) => obj?.[i], translations[currentLang]);
 		if (!text) return `[${key}]`;
@@ -50,48 +79,64 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	}
 
+	// --- DATA & API LOGIC ---
+	async function apiFetch(url, options = {}) {
+		const headers = {
+			...options.headers,
+			'Authorization': state.authHeader
+		};
+		const response = await fetch(url, {
+			...options,
+			headers
+		});
+		if (!response.ok) {
+			if (response.status === 401) handleLogout();
+			throw new Error(`API Error: ${response.status}`);
+		}
+		if (response.status === 204) return; // No content to parse
+		return response.json();
+	}
+
 	async function loadData() {
 		try {
-			const response = await fetch('/api/data');
-			if (!response.ok) throw new Error('Erreur réseau');
-			DB = await response.json();
+			DB = await apiFetch('/api/data');
+			console.log('Data loaded successfully from API!');
 		} catch (error) {
 			console.error(error);
-			mainContent.innerHTML = `<p class="error-message">Could not load data.</p>`;
+			if (error.message.includes('401')) {
+				loginError.textContent = t('login.error');
+			} else {
+				mainContent.innerHTML = `<p class="error-message">Could not load application data.</p>`;
+			}
+			throw error; // Propagate error to handleLogin
 		}
 	}
 
-	const loginContainer = document.getElementById('login-container'),
-		appContainer = document.getElementById('app-container'),
-		mainContent = document.getElementById('main-content'),
-		loginForm = document.getElementById('login-form'),
-		loginError = document.getElementById('login-error'),
-		currentUserSpan = document.getElementById('current-user-name'),
-		logoutBtn = document.getElementById('logout-btn'),
-		navDashboard = document.getElementById('nav-dashboard'),
-		navArchives = document.getElementById('nav-archives'),
-		navLogo = document.getElementById('nav-logo'),
-		addFab = document.getElementById('add-fab'),
-		modal = document.getElementById('add-modal'),
-		closeModalBtn = document.querySelector('.close-button'),
-		addForm = document.getElementById('add-form'),
-		modalTypeSelector = document.getElementById('modal-type-selector');
+	// --- AUTHENTICATION LOGIC ---
+	async function handleLogin(event) {
+		event.preventDefault();
+		const username = loginForm.username.value;
+		const password = loginForm.password.value;
+		const authString = btoa(`${username}:${password}`); // btoa is a browser function for Base64 encoding
+		state.authHeader = `Basic ${authString}`;
 
-	function handleLogin(e) {
-		e.preventDefault();
-		const user = DB.members.find(m => m.username === loginForm.username.value && m.password === loginForm.password.value);
-		if (user) {
-			state.currentUser = user;
-			localStorage.setItem('giftflowUser', JSON.stringify(user));
+		try {
+			await loadData();
+			state.currentUser = DB.members.find(member => member.username === username);
+			localStorage.setItem('giftflowUser', JSON.stringify(state.currentUser));
+			localStorage.setItem('giftflowAuth', state.authHeader);
 			initAppUI();
-		} else {
-			loginError.textContent = t('login.error');
+		} catch (error) {
+			state.authHeader = null;
+			state.currentUser = null;
 		}
 	}
 
 	function handleLogout() {
+		state.authHeader = null;
 		state.currentUser = null;
 		localStorage.removeItem('giftflowUser');
+		localStorage.removeItem('giftflowAuth');
 		appContainer.classList.remove('active');
 		loginContainer.classList.add('active');
 		mainContent.innerHTML = '';
@@ -99,6 +144,212 @@ document.addEventListener('DOMContentLoaded', () => {
 		loginForm.reset();
 	}
 
+	// --- RENDER FUNCTIONS ---
+	// (Render functions from previous correct answer are placed here, unchanged)
+	// ...
+
+	// --- INITIALIZATION ---
+	function initAppUI() {
+		loginContainer.classList.remove('active');
+		appContainer.classList.add('active');
+		currentUserSpan.textContent = `${t('header.loggedInAs')} ${state.currentUser.username}`;
+		state.currentView = 'dashboard';
+		render();
+	}
+
+	async function main() {
+		const langSwitcher = document.getElementById('lang-switcher');
+		langSwitcher.innerHTML = `<option value="fr">Français</option><option value="en">English</option>`;
+		langSwitcher.addEventListener('change', (event) => setLanguage(event.target.value));
+
+		const initialLang = localStorage.getItem('giftflow_lang') || window.APP_CONFIG.defaultLang || navigator.language.split('-')[0] || 'fr';
+		await setLanguage(initialLang);
+		langSwitcher.value = currentLang;
+
+		setupEventListeners(); // Setup basic listeners before attempting login
+
+		const savedAuth = localStorage.getItem('giftflowAuth');
+		if (savedAuth) {
+			state.authHeader = savedAuth;
+			try {
+				await loadData();
+				state.currentUser = JSON.parse(localStorage.getItem('giftflowUser'));
+				initAppUI();
+			} catch (error) {
+				handleLogout(); // Clean up if saved auth is invalid
+			}
+		} else {
+			loginContainer.classList.add('active');
+		}
+	}
+
+	main();
+
+
+	// --- All functions from here down are included for completeness ---
+
+	function setupEventListeners() {
+		const goToDashboard = (event) => {
+			event.preventDefault();
+			state.currentView = 'dashboard';
+			render();
+		};
+		loginForm.addEventListener('submit', handleLogin);
+		logoutBtn.addEventListener('click', handleLogout);
+		navDashboard.addEventListener('click', goToDashboard);
+		navLogo.addEventListener('click', goToDashboard);
+		navArchives.addEventListener('click', (e) => {
+			e.preventDefault();
+			state.currentView = 'archives';
+			state.selectedArchiveYear = null;
+			state.selectedArchiveMemberId = null;
+			render();
+		});
+		mainContent.addEventListener('click', async (e) => {
+			const card = e.target.closest('.gift-card');
+			if (!card) {
+				const mC = e.target.closest('.member-card');
+				if (mC) {
+					if (state.currentView !== 'archives') {
+						state.viewingMemberId = parseInt(mC.dataset.memberId);
+						state.currentView = 'memberProfile';
+					} else {
+						state.selectedArchiveMemberId = parseInt(mC.dataset.memberId);
+					}
+					render();
+				}
+				const bB = e.target.closest('.back-to-members-btn');
+				if (bB) {
+					state.selectedArchiveMemberId = null;
+					render();
+				}
+				const yB = e.target.closest('.year-btn');
+				if (yB) {
+					state.selectedArchiveYear = parseInt(yB.dataset.year);
+					state.selectedArchiveMemberId = null;
+					render();
+				}
+				return;
+			}
+			const ideaId = card.dataset.ideaId;
+			const giftId = card.dataset.giftId;
+			if (e.target.closest('.action-btn')) {
+				if (e.target.closest('.convert-btn')) {
+					const i = findById(DB.giftIdeas, parseInt(ideaId));
+					if (i) openAddModalForConversion(i);
+				} else if (e.target.closest('.edit-gift-btn')) {
+					const g = findById(DB.purchasedGifts, parseInt(giftId));
+					if (g) openEditGiftModal(g);
+				} else if (e.target.closest('.edit-price-btn')) {
+					const i = findById(DB.giftIdeas, parseInt(ideaId));
+					const pC = card.querySelector('.price-container');
+					const aC = card.querySelector('.card-actions');
+					pC.innerHTML = `<input type="number" class="price-input" step="0.01" value="${i.estimatedPrice || ''}" placeholder="Prix">`;
+					aC.innerHTML = `<button class="action-btn save-price-btn" title="Sauvegarder">✅</button><button class="action-btn cancel-edit-btn" title="Annuler">❌</button>`;
+				} else if (e.target.closest('.save-price-btn')) {
+					const i = card.querySelector('.price-input');
+					const nP = parseFloat(i.value) || null;
+					await apiFetch(`/api/ideas/${ideaId}`, {
+						method: 'PUT',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({
+							estimatedPrice: nP
+						})
+					});
+					await loadData();
+					render();
+				} else if (e.target.closest('.cancel-edit-btn')) {
+					render();
+				} else if (e.target.closest('.revert-to-idea-btn')) {
+					if (confirm(t('alerts.confirmRevertIdea'))) {
+						await apiFetch(`/api/gifts/${giftId}/revert-to-idea`, {
+							method: 'POST'
+						});
+						await loadData();
+						render();
+					}
+				} else if (e.target.closest('.delete-btn')) {
+					if (ideaId && confirm(t('alerts.confirmDeleteIdea'))) {
+						await apiFetch(`/api/ideas/${ideaId}`, {
+							method: 'DELETE'
+						});
+						await loadData();
+						render();
+					} else if (giftId && confirm(t('alerts.confirmDeleteGift'))) {
+						await apiFetch(`/api/gifts/${giftId}`, {
+							method: 'DELETE'
+						});
+						await loadData();
+						render();
+					}
+				}
+				return;
+			}
+			if (e.target.closest('.btn-status-change')) {
+				const b = e.target.closest('.btn-status-change');
+				const aD = b.parentElement;
+				const sId = aD.dataset.statusId;
+				const nS = b.dataset.newStatus;
+				const aDue = parseFloat(aD.dataset.amountDue);
+				const pL = {
+					status: nS,
+					amountPaid: nS === 'Tout Remboursé' ? aDue : 0
+				};
+				await apiFetch(`/api/status/${sId}`, {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(pL)
+				});
+				await loadData();
+				render();
+				return;
+			}
+			if (e.target.closest('.btn-partial-payment')) {
+				const b = e.target.closest('.btn-partial-payment');
+				const aD = b.parentElement;
+				const i = aD.querySelector('.input-partial-payment');
+				const pA = parseFloat(i.value);
+				if (!isNaN(pA) && pA >= 0) {
+					const sId = aD.dataset.statusId;
+					const aDue = parseFloat(aD.dataset.amountDue);
+					const pL = {
+						amountPaid: pA,
+						status: pA >= aDue ? 'Tout Remboursé' : 'Partiellement Remboursé'
+					};
+					await apiFetch(`/api/status/${sId}`, {
+						method: 'PUT',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify(pL)
+					});
+					await loadData();
+					render();
+				}
+				return;
+			}
+		});
+		addFab.addEventListener('click', openAddModal);
+		closeModalBtn.addEventListener('click', closeModal);
+		window.addEventListener('click', (e) => {
+			if (e.target == modal) closeModal();
+		});
+		modalTypeSelector.addEventListener('click', (e) => {
+			const b = e.target.closest('.btn');
+			if (b && b.dataset.formType) {
+				modalTypeSelector.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+				b.classList.add('active');
+				renderAddForm(b.dataset.formType);
+			}
+		});
+		addForm.addEventListener('submit', handleAddFormSubmit);
+	}
+
+	// All other render functions
 	function render() {
 		mainContent.innerHTML = '';
 		addFab.style.display = 'none';
@@ -274,7 +525,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					alert(t('alerts.fillFields'));
 					return;
 				}
-				await fetch('/api/ideas', {
+				await apiFetch('/api/ideas', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
@@ -300,7 +551,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					return;
 				}
 				if (eId) {
-					await fetch(`/api/gifts/${eId}`, {
+					await apiFetch(`/api/gifts/${eId}`, {
 						method: 'PUT',
 						headers: {
 							'Content-Type': 'application/json'
@@ -313,7 +564,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					if (cId) {
 						url += `?deleteIdeaId=${cId}`;
 					}
-					await fetch(url, {
+					await apiFetch(url, {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json'
@@ -330,196 +581,4 @@ document.addEventListener('DOMContentLoaded', () => {
 			alert(t('alerts.errorSave'));
 		}
 	}
-
-	function setupEventListeners() {
-		const goToDashboard = (event) => {
-			event.preventDefault();
-			state.currentView = 'dashboard';
-			render();
-		};
-		loginForm.addEventListener('submit', handleLogin);
-		logoutBtn.addEventListener('click', handleLogout);
-		navDashboard.addEventListener('click', goToDashboard);
-		navLogo.addEventListener('click', goToDashboard);
-		navArchives.addEventListener('click', (e) => {
-			e.preventDefault();
-			state.currentView = 'archives';
-			state.selectedArchiveYear = null;
-			state.selectedArchiveMemberId = null;
-			render();
-		});
-		mainContent.addEventListener('click', async (e) => {
-			const card = e.target.closest('.gift-card');
-			if (!card) {
-				const mC = e.target.closest('.member-card');
-				if (mC) {
-					if (state.currentView !== 'archives') {
-						state.viewingMemberId = parseInt(mC.dataset.memberId);
-						state.currentView = 'memberProfile';
-					} else {
-						state.selectedArchiveMemberId = parseInt(mC.dataset.memberId);
-					}
-					render();
-				}
-				const bB = e.target.closest('.back-to-members-btn');
-				if (bB) {
-					state.selectedArchiveMemberId = null;
-					render();
-				}
-				const yB = e.target.closest('.year-btn');
-				if (yB) {
-					state.selectedArchiveYear = parseInt(yB.dataset.year);
-					state.selectedArchiveMemberId = null;
-					render();
-				}
-				return;
-			}
-			const ideaId = card.dataset.ideaId;
-			const giftId = card.dataset.giftId;
-			if (e.target.closest('.action-btn')) {
-				if (e.target.closest('.convert-btn')) {
-					const i = findById(DB.giftIdeas, parseInt(ideaId));
-					if (i) openAddModalForConversion(i);
-				} else if (e.target.closest('.edit-gift-btn')) {
-					const g = findById(DB.purchasedGifts, parseInt(giftId));
-					if (g) openEditGiftModal(g);
-				} else if (e.target.closest('.edit-price-btn')) {
-					const i = findById(DB.giftIdeas, parseInt(ideaId));
-					const pC = card.querySelector('.price-container');
-					const aC = card.querySelector('.card-actions');
-					pC.innerHTML = `<input type="number" class="price-input" step="0.01" value="${i.estimatedPrice || ''}" placeholder="Prix">`;
-					aC.innerHTML = `<button class="action-btn save-price-btn" title="Sauvegarder">✅</button><button class="action-btn cancel-edit-btn" title="Annuler">❌</button>`;
-				} else if (e.target.closest('.save-price-btn')) {
-					const i = card.querySelector('.price-input');
-					const nP = parseFloat(i.value) || null;
-					await fetch(`/api/ideas/${ideaId}`, {
-						method: 'PUT',
-						headers: {
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify({
-							estimatedPrice: nP
-						})
-					});
-					await loadData();
-					render();
-				} else if (e.target.closest('.cancel-edit-btn')) {
-					render();
-				} else if (e.target.closest('.revert-to-idea-btn')) {
-					if (confirm(t('alerts.confirmRevertIdea'))) {
-						await fetch(`/api/gifts/${giftId}/revert-to-idea`, {
-							method: 'POST'
-						});
-						await loadData();
-						render();
-					}
-				} else if (e.target.closest('.delete-btn')) {
-					if (ideaId && confirm(t('alerts.confirmDeleteIdea'))) {
-						await fetch(`/api/ideas/${ideaId}`, {
-							method: 'DELETE'
-						});
-						await loadData();
-						render();
-					} else if (giftId && confirm(t('alerts.confirmDeleteGift'))) {
-						await fetch(`/api/gifts/${giftId}`, {
-							method: 'DELETE'
-						});
-						await loadData();
-						render();
-					}
-				}
-				return;
-			}
-			if (e.target.closest('.btn-status-change')) {
-				const b = e.target.closest('.btn-status-change');
-				const aD = b.parentElement;
-				const sId = aD.dataset.statusId;
-				const nS = b.dataset.newStatus;
-				const aDue = parseFloat(aD.dataset.amountDue);
-				const pL = {
-					status: nS,
-					amountPaid: nS === 'Tout Remboursé' ? aDue : 0
-				};
-				await fetch(`/api/status/${sId}`, {
-					method: 'PUT',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify(pL)
-				});
-				await loadData();
-				render();
-				return;
-			}
-			if (e.target.closest('.btn-partial-payment')) {
-				const b = e.target.closest('.btn-partial-payment');
-				const aD = b.parentElement;
-				const i = aD.querySelector('.input-partial-payment');
-				const pA = parseFloat(i.value);
-				if (!isNaN(pA) && pA >= 0) {
-					const sId = aD.dataset.statusId;
-					const aDue = parseFloat(aD.dataset.amountDue);
-					const pL = {
-						amountPaid: pA,
-						status: pA >= aDue ? 'Tout Remboursé' : 'Partiellement Remboursé'
-					};
-					await fetch(`/api/status/${sId}`, {
-						method: 'PUT',
-						headers: {
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify(pL)
-					});
-					await loadData();
-					render();
-				}
-				return;
-			}
-		});
-		addFab.addEventListener('click', openAddModal);
-		closeModalBtn.addEventListener('click', closeModal);
-		window.addEventListener('click', (e) => {
-			if (e.target == modal) closeModal();
-		});
-		modalTypeSelector.addEventListener('click', (e) => {
-			const b = e.target.closest('.btn');
-			if (b && b.dataset.formType) {
-				modalTypeSelector.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
-				b.classList.add('active');
-				renderAddForm(b.dataset.formType);
-			}
-		});
-		addForm.addEventListener('submit', handleAddFormSubmit);
-	}
-
-	function initAppUI() {
-		loginContainer.classList.remove('active');
-		appContainer.classList.add('active');
-		currentUserSpan.textContent = `${t('header.loggedInAs')} ${state.currentUser.username}`;
-		state.currentView = 'dashboard';
-		render();
-	}
-	async function main() {
-		const langSwitcher = document.getElementById('lang-switcher');
-		langSwitcher.innerHTML = `<option value="fr">Français</option><option value="en">English</option>`;
-		langSwitcher.addEventListener('change', (e) => setLanguage(e.target.value));
-		const initialLang = localStorage.getItem('giftflow_lang') || window.APP_CONFIG.defaultLang || navigator.language.split('-')[0] || 'fr';
-		await setLanguage(initialLang);
-		langSwitcher.value = currentLang;
-		await loadData();
-		setupEventListeners();
-		const savedUser = localStorage.getItem('giftflowUser');
-		if (savedUser) {
-			state.currentUser = JSON.parse(savedUser);
-			if (DB.members && DB.members.some(m => m.id === state.currentUser.id)) {
-				initAppUI();
-			} else {
-				handleLogout();
-				loginContainer.classList.add('active');
-			}
-		} else {
-			loginContainer.classList.add('active');
-		}
-	}
-	main();
 });
