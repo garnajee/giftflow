@@ -7,6 +7,14 @@
       "targetMemberId": 2,
       "creationDate": "2024-10-15T10:00:00Z",
       "creatorId": 1
+    },
+    {
+      "title": "computer",
+      "estimatedPrice": 999,
+      "targetMemberId": 3,
+      "creationDate": "2025-11-09T10:36:54.968Z",
+      "creatorId": 1,
+      "id": 102
     }
   ],
   "purchasedGifts": [
@@ -36,6 +44,31 @@
         2,
         3
       ]
+    },
+    {
+      "name": "scooter",
+      "totalPrice": 10000,
+      "store": "garage",
+      "payerId": 1,
+      "purchaseDate": "2025-11-07T00:00:00.000Z",
+      "targetMemberId": 3,
+      "reimbursementMemberIds": [
+        1,
+        2
+      ],
+      "id": 203
+    },
+    {
+      "name": "bluetooth speaker",
+      "totalPrice": 69.99,
+      "store": "amazon",
+      "payerId": 1,
+      "purchaseDate": "2025-11-04T00:00:00.000Z",
+      "targetMemberId": 3,
+      "reimbursementMemberIds": [
+        2
+      ],
+      "id": 204
     }
   ],
   "reimbursementStatus": [
@@ -73,6 +106,27 @@
       "memberId": 3,
       "status": "Partiellement Remboursé",
       "amountPaid": 10
+    },
+    {
+      "id": 306,
+      "giftId": 203,
+      "memberId": 1,
+      "status": "Tout Remboursé",
+      "amountPaid": 5000
+    },
+    {
+      "id": 307,
+      "giftId": 203,
+      "memberId": 2,
+      "status": "Partiellement Remboursé",
+      "amountPaid": 2300
+    },
+    {
+      "id": 308,
+      "giftId": 204,
+      "memberId": 2,
+      "status": "Non Remboursé",
+      "amountPaid": 0
     }
   ]
 }
