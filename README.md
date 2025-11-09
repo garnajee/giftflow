@@ -8,11 +8,11 @@ A self-hosted, modern, mobile-friendly web application for managing gift ideas, 
   <tr>
     <td align="center" width="50%">
       <h3>Main Dashboard</h3>
-      <img src="https://private-user-images.githubusercontent.com/62147746/511783454-7aa5635c-08d3-437c-b4a6-8bdd496e9370.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjI2ODU0OTcsIm5iZiI6MTc2MjY4NTE5NywicGF0aCI6Ii82MjE0Nzc0Ni81MTE3ODM0NTQtN2FhNTYzNWMtMDhkMy00MzdjLWI0YTYtOGJkZDQ5NmU5MzcwLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTExMDklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUxMTA5VDEwNDYzN1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTViMGVmMDE5NGQ1OWMxYmM5ZDljNzI3ZGZlMGZhZGUxMDgxMjhkY2YwYjMzOGM5Y2Q0MWI1ODFmMjEwNTA1ZTAmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.11EIN_S8O52E8G0ZTadyoBAcEsURYed3PWZO9W8Fyvk" alt="GiftFlow Main Dashboard" width="100%" />
+      <img src="https://github.com/user-attachments/assets/7aa5635c-08d3-437c-b4a6-8bdd496e9370" alt="GiftFlow Main Dashboard" width="100%" />
     </td>
     <td align="center" width="50%">
       <h3>Detailed View by Person</h3>
-      <img src="https://private-user-images.githubusercontent.com/62147746/511783456-a253c094-194a-4229-915a-8e0e4cf1cc63.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjI2ODU0OTcsIm5iZiI6MTc2MjY4NTE5NywicGF0aCI6Ii82MjE0Nzc0Ni81MTE3ODM0NTYtYTI1M2MwOTQtMTk0YS00MjI5LTkxNWEtOGUwZTRjZjFjYzYzLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTExMDklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUxMTA5VDEwNDYzN1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWIzYjQyYzdmM2RjN2VjNWYxZDRlM2FmYjc3ZTE3MmIwZTZkNjNjYTM1OTllOGYzNGI3MWY2NjNlZmVkMmQ2YjkmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.VJh2MZv5nrM35DD-DmfAqT1qtsgeeoJJbYOM6GbZZDs" alt="Detailed gift and idea view for a single person" width="100%" />
+      <img src="https://github.com/user-attachments/assets/a253c094-194a-4229-915a-8e0e4cf1cc63" alt="Detailed gift and idea view for a single person" width="100%" />
     </td>
   </tr>
 </table>
@@ -23,11 +23,11 @@ A self-hosted, modern, mobile-friendly web application for managing gift ideas, 
   <tr>
     <td align="center" width="50%">
       <h3>Add Idea Form</h3>
-      <img src="https://private-user-images.githubusercontent.com/62147746/511783822-facdbc6b-3447-4f19-aedb-9770adb1638f.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjI2ODU3NDUsIm5iZiI6MTc2MjY4NTQ0NSwicGF0aCI6Ii82MjE0Nzc0Ni81MTE3ODM4MjItZmFjZGJjNmItMzQ0Ny00ZjE5LWFlZGItOTc3MGFkYjE2MzhmLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTExMDklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUxMTA5VDEwNTA0NVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTgxMWNjYTZlMThlZGJkZGJhNDU4NDFjMjEyNThiN2MzNWIzOTM3ZjA1ZmQxZGFiOWZhYWRhZmZkODYxZGIyYjAmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.STnBImscSaTHkHX5A9iyLFY1BxmxbGH3II4QA-GYpKY" alt="Gift idea submission form" width="100%" />
+      <img src="https://github.com/user-attachments/assets/facdbc6b-3447-4f19-aedb-9770adb1638f" alt="Gift idea submission form" width="100%" />
     </td>
     <td align="center" width="50%">
       <h3>Add Purchase Form</h3>
-      <img src="https://private-user-images.githubusercontent.com/62147746/511783457-80c54cdf-fc1d-4323-aad7-cc2082fc73c1.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjI2ODU0OTcsIm5iZiI6MTc2MjY4NTE5NywicGF0aCI6Ii82MjE0Nzc0Ni81MTE3ODM0NTctODBjNTRjZGYtZmMxZC00MzIzLWFhZDctY2MyMDgyZmM3M2MxLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTExMDklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUxMTA5VDEwNDYzN1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTI5MTU2MzZjMmQ0Y2ZkMGVkNTFlMzJiNTUyMzM0YTBjMzgyNDc3YzVjZjAzNTAxOWE4NzJhOGQxNDAyOTBiMzMmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.twpfLw_ubim8C-cY5llJEbRQdcL2WL1WwvWuZqRG5ck" alt="Gift purchase registration form with reimbursement tracking" width="100%" />
+      <img src="https://github.com/user-attachments/assets/80c54cdf-fc1d-4323-aad7-cc2082fc73c1" alt="Gift purchase registration form with reimbursement tracking" width="100%" />
     </td>
   </tr>
 </table>
@@ -37,8 +37,18 @@ A self-hosted, modern, mobile-friendly web application for managing gift ideas, 
 <table>
   <tr>
     <td align="center" colspan="2">
-      <h3>Historical Archive View</h3>
-      <img src="https://private-user-images.githubusercontent.com/62147746/511783455-1474dc69-f2b5-41ae-8ca6-041e74b6f82a.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjI2ODU5MDQsIm5iZiI6MTc2MjY4NTYwNCwicGF0aCI6Ii82MjE0Nzc0Ni81MTE3ODM0NTUtMTQ3NGRjNjktZjJiNS00MWFlLThjYTYtMDQxZTc0YjZmODJhLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTExMDklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUxMTA5VDEwNTMyNFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTYyMTBlYmQ3YTMwNzYzOTkzYzhiNTRkMDhkODRlNTkxZWY3M2IyNWYxNDRmMmM1MDE5NGI2YTJhM2M0YTdlODAmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.3-AytGzlgxcVCOoaAMJdwAkafieYcrjOHjklwSQ8lyc" alt="Archived gifts from previous years" width="100%" />
+      <h3>Historical Archive View 1</h3>
+      <img src="https://github.com/user-attachments/assets/1474dc69-f2b5-41ae-8ca6-041e74b6f82a" alt="Archived gifts from previous years" width="70%" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <h3>Historical Archive View 2</h3>
+      <img src="https://github.com/user-attachments/assets/c4ca75db-9a99-4857-9da1-82642678d404" alt="Gift purchase registration form with reimbursement tracking" width="100%" />
+    </td>
+    <td align="center" width="50%">
+      <h3>Historical Archive View 3</h3>
+      <img src="https://github.com/user-attachments/assets/2a7f7b8a-f204-44ad-9195-c4f4e1d59c10" alt="Gift purchase registration form with reimbursement tracking" width="100%" />
     </td>
   </tr>
 </table>
