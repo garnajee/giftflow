@@ -1,0 +1,78 @@
+{
+  "giftIdeas": [
+    {
+      "id": 101,
+      "title": "A new mechanical keyboard",
+      "estimatedPrice": 120,
+      "targetMemberId": 2,
+      "creationDate": "2024-10-15T10:00:00Z",
+      "creatorId": 1
+    }
+  ],
+  "purchasedGifts": [
+    {
+      "id": 201,
+      "name": "Espresso Machine",
+      "totalPrice": 300,
+      "store": "Amazon",
+      "payerId": 1,
+      "purchaseDate": "2024-11-05T09:00:00Z",
+      "targetMemberId": 3,
+      "reimbursementMemberIds": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": 202,
+      "name": "Board Game 'Dune'",
+      "totalPrice": 60,
+      "store": "CoolStuffInc",
+      "payerId": 2,
+      "purchaseDate": "2023-12-10T18:00:00Z",
+      "targetMemberId": 1,
+      "reimbursementMemberIds": [
+        1,
+        2,
+        3
+      ]
+    }
+  ],
+  "reimbursementStatus": [
+    {
+      "id": 301,
+      "giftId": 201,
+      "memberId": 1,
+      "status": "Tout Remboursé",
+      "amountPaid": 150
+    },
+    {
+      "id": 302,
+      "giftId": 201,
+      "memberId": 2,
+      "status": "Non Remboursé",
+      "amountPaid": 0
+    },
+    {
+      "id": 303,
+      "giftId": 202,
+      "memberId": 1,
+      "status": "Non Remboursé",
+      "amountPaid": 0
+    },
+    {
+      "id": 304,
+      "giftId": 202,
+      "memberId": 2,
+      "status": "Tout Remboursé",
+      "amountPaid": 20
+    },
+    {
+      "id": 305,
+      "giftId": 202,
+      "memberId": 3,
+      "status": "Partiellement Remboursé",
+      "amountPaid": 10
+    }
+  ]
+}

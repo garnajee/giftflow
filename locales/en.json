@@ -1,0 +1,94 @@
+{
+  "langName": "English",
+  "login": {
+    "title": "Login",
+    "username": "Username",
+    "password": "Password",
+    "button": "Login",
+    "error": "Incorrect credentials."
+  },
+  "header": {
+    "home": "Home",
+    "archives": "Archives",
+    "loggedInAs": "Logged in:",
+    "logout": "Logout"
+  },
+  "dashboard": {
+    "title": "Who are you looking for a gift for?",
+    "ideas_one": "idea",
+    "ideas_other": "ideas",
+    "purchases_one": "purchase",
+    "purchases_other": "purchases"
+  },
+  "memberProfile": {
+    "title": "Gifts for {name}",
+    "ideasTitle": "Ideas ({count})",
+    "purchasesTitle": "Purchased ({count})",
+    "noIdeas": "No ideas for now.",
+    "noPurchases": "No gifts purchased this year."
+  },
+  "giftCard": {
+    "priceUndefined": "Price not set",
+    "priceEstimated": "(estimated)",
+    "createdBy": "By {name} on {date}"
+  },
+  "purchasedCard": {
+    "purchasedAt": "Purchased at <strong>{store}</strong> on {date}",
+    "paidBy": "Paid by: <strong>{name}</strong>",
+    "editGift": "Edit gift",
+    "revertToIdea": "Revert to idea",
+    "deleteGift": "Delete gift"
+  },
+  "reimbursement": {
+    "title": "Reimbursements ({amount} / person)",
+    "tableHeaderMember": "Member",
+    "tableHeaderStatus": "Status",
+    "tableHeaderActions": "Actions",
+    "amountDue": "Owes: {amount}",
+    "statusUnpaid": "Unpaid",
+    "statusPaid": "Fully Paid",
+    "statusPartial": "Partial ({amount})",
+    "remaining": "Remains: {amount}",
+    "actionPaid": "Paid",
+    "actionUnpaid": "Unpaid",
+    "amountPlaceholder": "Amount",
+    "actionPartial": "Partial Payment"
+  },
+  "archives": {
+    "title": "Archives",
+    "selectYear": "Please select a year to begin.",
+    "giftsForWhom": "Gifts for whom in {year}?",
+    "noGiftsForYear": "No gifts recorded for this year.",
+    "giftsForMemberInYear": "Gifts for {name} in {year}",
+    "backButton": "← Back",
+    "giftsReceived_one": "gift received",
+    "giftsReceived_other": "gifts received"
+  },
+  "modal": {
+    "addTitle": "Add a Gift",
+    "editTitle": "Edit a Gift",
+    "question": "What would you like to add?",
+    "typeIdea": "An Idea",
+    "typePurchase": "A Real Purchase",
+    "ideaName": "Idea name",
+    "ideaPrice": "Estimated price (optional)",
+    "for": "For: <strong>{name}</strong>",
+    "addIdeaBtn": "Add Idea",
+    "giftName": "Gift name",
+    "giftPrice": "Total price",
+    "giftStore": "Store / Website",
+    "giftDate": "Purchase date",
+    "giftPayer": "Paid by",
+    "giftParticipants": "Participants",
+    "addGiftBtn": "Add Purchase",
+    "editGiftBtn": "Update Purchase"
+  },
+  "alerts": {
+    "confirmDeleteIdea": "Delete this idea?",
+    "confirmDeleteGift": "PERMANENTLY delete this purchased gift?",
+    "confirmRevertIdea": "Revert this gift to a simple idea? Reimbursement info will be lost.",
+    "fillFields": "Please fill all required fields.",
+    "selectParticipant": "Select at least one participant.",
+    "errorSave": "An error occurred while saving."
+  }
+}

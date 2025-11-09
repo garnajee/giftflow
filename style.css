@@ -1,0 +1,434 @@
+:root {
+  --primary-color: #4a90e2;
+  --secondary-color: #50e3c2;
+  --background-color: #f4f7f6;
+  --card-background: #ffffff;
+  --text-color: #333;
+  --text-light: #777;
+  --border-color: #e0e0e0;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --status-red: #ffebee;
+  --status-red-text: #c62828;
+  --status-green: #e8f5e9;
+  --status-green-text: #2e7d32;
+  --status-yellow: #fffde7;
+  --status-yellow-text: #f9a825;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+.container {
+  display: none;
+}
+#login-container.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+.login-box {
+  background: var(--card-background);
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+  margin: 1rem;
+}
+.login-box h1 {
+  margin-bottom: 2rem;
+  color: var(--primary-color);
+}
+#app-container.active {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+header {
+  background: var(--card-background);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+header .logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+
+}
+
+#nav-logo {
+    text-decoration: none;
+    &:hover { 
+        text-decoration: none; 
+    }
+}
+nav a {
+  margin: 0 1rem;
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 600;
+  transition: color 0.3s;
+}
+nav a:hover,
+nav a.active {
+  color: var(--primary-color);
+}
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+main {
+  padding: 2rem;
+  flex-grow: 1;
+}
+.btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+.btn-primary:hover {
+  background-color: #357abd;
+}
+.btn-secondary {
+  background-color: #f0f0f0;
+  color: var(--text-color);
+}
+.btn-secondary:hover {
+  background-color: #e0e0e0;
+}
+.btn-danger {
+  background-color: var(--status-red-text);
+  color: white;
+}
+.btn-danger:hover {
+  background-color: #a02020;
+}
+.input-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+.input-group input,
+.input-group select,
+.input-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-family: "Poppins", sans-serif;
+}
+.error-message {
+  color: var(--status-red-text);
+  margin-top: 1rem;
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+.member-card,
+.gift-card {
+  background: var(--card-background);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.member-card {
+  text-align: center;
+  cursor: pointer;
+}
+.member-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+.member-card h3 {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+}
+.section-title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary-color);
+}
+.gift-card h4 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+.gift-card .price {
+  font-weight: 700;
+  color: var(--secondary-color);
+  font-size: 1.2rem;
+}
+.gift-card .meta {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  margin-top: 0.5rem;
+}
+.gift-card p {
+  margin: 0.5rem 0;
+}
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: var(--text-light);
+  padding: 0.2rem;
+}
+.action-btn:hover {
+  color: var(--primary-color);
+}
+.action-btn.delete-btn:hover {
+  color: var(--status-red-text);
+}
+.reimbursement-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+.reimbursement-table th,
+.reimbursement-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+.reimbursement-table th {
+  font-weight: 600;
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+.reimbursement-table tr.status-unpaid {
+  background-color: var(--status-red);
+}
+.reimbursement-table tr.status-paid {
+  background-color: var(--status-green);
+}
+.reimbursement-table tr.status-partial {
+  background-color: var(--status-yellow);
+}
+.reimbursement-table .status-tag {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+.reimbursement-table .status-tag.unpaid {
+  background-color: var(--status-red-text);
+  color: white;
+}
+.reimbursement-table .status-tag.paid {
+  background-color: var(--status-green-text);
+  color: white;
+}
+.reimbursement-table .status-tag.partial {
+  background-color: var(--status-yellow-text);
+  color: white;
+}
+.reimbursement-table .remaining-amount {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--status-yellow-text);
+}
+.reimbursement-table .user-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+.reimbursement-table .user-actions button {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.6rem;
+}
+.reimbursement-table .user-actions input {
+  width: 70px;
+  padding: 0.3rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+.price-input {
+  width: 90px;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+.archive-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.year-btn.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+.archive-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.sub-title {
+  color: var(--text-light);
+  font-size: 1.2rem;
+}
+.fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 2rem;
+  border: none;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1001;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+}
+.modal.active {
+  display: flex;
+}
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 2rem;
+  border: 1px solid #888;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 12px;
+  position: relative;
+}
+.close-button {
+  color: #aaa;
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+#modal-type-selector {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.form-switch {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.form-switch .btn.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+#add-form {
+  display: none;
+}
+#add-form.visible {
+  display: block;
+}
+.checkbox-group {
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+}
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.2rem 0;
+  margin-bottom: 0.5rem;
+}
+#add-form .submit-btn {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
+}
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  nav {
+    margin-top: 0.5rem;
+  }
+  main {
+    padding: 1rem;
+  }
+  .fab {
+    bottom: 1rem;
+    right: 1rem;
+  }
+}
+
+.lang-switcher {
+    padding: 0.3rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-background);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+}

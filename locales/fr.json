@@ -1,0 +1,94 @@
+{
+  "langName": "Français",
+  "login": {
+    "title": "Connexion",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "button": "Connexion",
+    "error": "Identifiants incorrects."
+  },
+  "header": {
+    "home": "Accueil",
+    "archives": "Archives",
+    "loggedInAs": "Connecté :",
+    "logout": "Déconnexion"
+  },
+  "dashboard": {
+    "title": "Pour qui cherchez-vous un cadeau ?",
+    "ideas_one": "idée",
+    "ideas_other": "idées",
+    "purchases_one": "achat",
+    "purchases_other": "achats"
+  },
+  "memberProfile": {
+    "title": "Cadeaux pour {name}",
+    "ideasTitle": "Idées ({count})",
+    "purchasesTitle": "Achetés ({count})",
+    "noIdeas": "Aucune idée pour le moment.",
+    "noPurchases": "Aucun cadeau acheté cette année."
+  },
+  "giftCard": {
+    "priceUndefined": "Prix non défini",
+    "priceEstimated": "(estimé)",
+    "createdBy": "Par {name} le {date}"
+  },
+  "purchasedCard": {
+    "purchasedAt": "Acheté chez <strong>{store}</strong> le {date}",
+    "paidBy": "Payé par : <strong>{name}</strong>",
+    "editGift": "Modifier le cadeau",
+    "revertToIdea": "Repasser en idée",
+    "deleteGift": "Supprimer le cadeau"
+  },
+  "reimbursement": {
+    "title": "Remboursements ({amount} / personne)",
+    "tableHeaderMember": "Membre",
+    "tableHeaderStatus": "Statut",
+    "tableHeaderActions": "Actions",
+    "amountDue": "Doit : {amount}",
+    "statusUnpaid": "Non Remboursé",
+    "statusPaid": "Tout Remboursé",
+    "statusPartial": "Partiel ({amount})",
+    "remaining": "Reste : {amount}",
+    "actionPaid": "Payé",
+    "actionUnpaid": "Non Payé",
+    "amountPlaceholder": "Montant",
+    "actionPartial": "Paiement Partiel"
+  },
+  "archives": {
+    "title": "Archives",
+    "selectYear": "Veuillez sélectionner une année pour commencer.",
+    "giftsForWhom": "Cadeaux pour qui en {year} ?",
+    "noGiftsForYear": "Aucun cadeau enregistré pour cette année.",
+    "giftsForMemberInYear": "Cadeaux pour {name} en {year}",
+    "backButton": "← Retour",
+    "giftsReceived_one": "cadeau reçu",
+    "giftsReceived_other": "cadeaux reçus"
+  },
+  "modal": {
+    "addTitle": "Ajouter un cadeau",
+    "editTitle": "Modifier un cadeau",
+    "question": "Que souhaitez-vous ajouter ?",
+    "typeIdea": "Une Idée",
+    "typePurchase": "Un Achat Réel",
+    "ideaName": "Nom de l'idée",
+    "ideaPrice": "Prix estimé (optionnel)",
+    "for": "Pour : <strong>{name}</strong>",
+    "addIdeaBtn": "Ajouter l'Idée",
+    "giftName": "Nom du cadeau",
+    "giftPrice": "Prix total",
+    "giftStore": "Enseigne / Site",
+    "giftDate": "Date d'achat",
+    "giftPayer": "Payé par",
+    "giftParticipants": "Participants",
+    "addGiftBtn": "Ajouter l'Achat",
+    "editGiftBtn": "Modifier l'Achat"
+  },
+  "alerts": {
+    "confirmDeleteIdea": "Supprimer cette idée ?",
+    "confirmDeleteGift": "Supprimer DÉFINITIVEMENT ce cadeau acheté ?",
+    "confirmRevertIdea": "Repasser ce cadeau en simple idée ? Les informations de remboursement seront perdues.",
+    "fillFields": "Veuillez remplir les champs obligatoires.",
+    "selectParticipant": "Sélectionnez au moins un participant.",
+    "errorSave": "Une erreur est survenue lors de la sauvegarde."
+  }
+}

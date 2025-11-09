@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GiftFlow</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="login-container" class="container active">
+        <div class="login-box">
+          <h1>🎁 GiftFlow</h1>
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="username" data-translate="login.username">Nom d'utilisateur</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password" data-translate="login.password">Mot de passe</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" data-translate="login.button">Connexion</button>
+                <p id="login-error" class="error-message"></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="app-container" class="container">
+        <header>
+            <a href="#" id="nav-logo" class="logo">🎁 GiftFlow</a>
+            <nav>
+                <a href="#" id="nav-dashboard" data-translate="header.home">Accueil</a>
+                <a href="#" id="nav-archives" data-translate="header.archives">Archives</a>
+            </nav>
+            <div class="user-info">
+                <select id="lang-switcher" class="lang-switcher"></select>
+                <span id="current-user-name"></span>
+                <button id="logout-btn" class="btn btn-secondary" data-translate="header.logout">Déconnexion</button>
+            </div>
+        </header>
+        <main id="main-content"></main>
+        <button id="add-fab" class="fab">+</button>
+    </div>
+
+    <div id="add-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modal-title"></h2>
+            <div id="modal-type-selector">
+                <p data-translate="modal.question"></p>
+                <div class="form-switch">
+                    <button class="btn" data-form-type="idea" data-translate="modal.typeIdea"></button>
+                    <button class="btn" data-form-type="purchase" data-translate="modal.typePurchase"></button>
+                </div>
+            </div>
+            <form id="add-form" novalidate></form>
+        </div>
+    </div>
+    
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

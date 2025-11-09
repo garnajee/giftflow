@@ -1,0 +1,20 @@
+services:
+  api:
+    build:
+      context: ./backend
+    container_name: giftflow-api
+    restart: always
+    volumes:
+      - ./data:/data
+
+  nginx:
+    build:
+      context: .
+    container_name: giftflow-nginx
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    environment:
+      - DEFAULT_LANG=fr
