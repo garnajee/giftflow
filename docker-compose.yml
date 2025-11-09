@@ -17,4 +17,4 @@ services:
     depends_on:
       - api
     environment:
-      - DEFAULT_LANG=fr
+      - DEFAULT_LANG=en
