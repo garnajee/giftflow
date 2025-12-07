@@ -61,6 +61,7 @@ A self-hosted, modern, mobile-friendly web application for managing gift ideas, 
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation & Deployment](#installation--deployment)
+  - [Docker Setup](#docker-setup)
 - [Project Structure](#project-structure)
 - [API Usage & Endpoints](#api-usage--endpoints)
   - [Authentication](#authentication)
@@ -141,6 +142,44 @@ You need to have Docker and Docker Compose installed on your machine.
     ```bash
     docker-compose down
     ```
+
+### Docker Setup
+
+Since GiftFlow images are built automatically via GitHub Actions, you don't need to clone the entire code to deploy it. You only need the `docker-compose.yml` file.
+
+### 1. Prepare Data Persistence
+Before starting the containers, you **must** create the data directory and initialize the JSON files with valid structures.
+
+```bash
+mkdir giftflow
+cd giftflow
+mkdir data
+
+# Create initial users file (Replace credentials!)
+echo '{
+  "members": [
+    { "id": 1, "username": "Admin", "password": "changeMe", "isAdmin": true }
+  ]
+}' > data/users.json
+
+# Create empty database structure
+echo '{
+  "families": [],
+  "userFamilyLinks": [],
+  "giftIdeas": [],
+  "purchasedGifts": [],
+  "reimbursementStatus": []
+}' > data/database.json
+```
+
+Run:
+
+Start the application:
+
+```bash
+docker-compose up -d
+```
+
 
 ## Project Structure
 

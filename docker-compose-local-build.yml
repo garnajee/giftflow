@@ -1,13 +1,15 @@
 services:
   api:
-    image: ghcr.io/garnajee/giftflow:backend
+    build:
+      context: ./backend
     container_name: giftflow-api
     restart: always
     volumes:
       - ./data:/data
 
   nginx:
-    image: ghcr.io/garnajee/giftflow:frontend
+    build:
+      context: .
     container_name: giftflow-nginx
     restart: always
     ports:
