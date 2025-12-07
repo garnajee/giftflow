@@ -27,12 +27,22 @@
         </div>
     </div>
 
+    <div id="family-selector-container" class="container">
+      <div class="center-box">
+        <h2 data-translate="familySelector.title">Select a Family</h2>
+          <div id="family-list" class="grid-container"></div>
+      </div>
+    </div>
+
     <div id="app-container" class="container">
         <header>
             <a href="#" id="nav-logo" class="logo">🎁 GiftFlow</a>
             <nav>
                 <a href="#" id="nav-dashboard" data-translate="header.home">Accueil</a>
                 <a href="#" id="nav-archives" data-translate="header.archives">Archives</a>
+                <!-- Liens présents mais cachés par défaut -->
+                <a href="#" id="nav-switch" class="hidden" data-translate="header.switchFamily">Changer Famille</a>
+                <a href="#" id="nav-admin" class="hidden" data-translate="header.admin">Admin</a>
             </nav>
             <div class="user-info">
                 <select id="lang-switcher" class="lang-switcher"></select>

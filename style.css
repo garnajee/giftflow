@@ -432,3 +432,53 @@ main {
     font-weight: 600;
     cursor: pointer;
 }
+
+/* Styles for Family Selector and Admin Dashboard */
+.center-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.family-card {
+  background: var(--card-background);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.family-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.admin-dashboard table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  background: var(--card-background);
+  box-shadow: var(--shadow);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.admin-dashboard th, .admin-dashboard td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+.admin-dashboard th {
+  background-color: #f9f9f9;
+}
+.admin-dashboard .actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.hidden {
+    display: none !important;
+}

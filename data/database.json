@@ -1,7 +1,44 @@
 {
+  "families": [
+    {
+      "id": 1,
+      "name": "fam 1"
+    },
+    {
+      "name": "famille2",
+      "id": 2
+    }
+  ],
+  "userFamilyLinks": [
+    {
+      "userId": 1,
+      "familyId": 1
+    },
+    {
+      "userId": 2,
+      "familyId": 1
+    },
+    {
+      "userId": 3,
+      "familyId": 1
+    },
+    {
+      "userId": 4,
+      "familyId": 1
+    },
+    {
+      "userId": 3,
+      "familyId": 2
+    },
+    {
+      "userId": 4,
+      "familyId": 2
+    }
+  ],
   "giftIdeas": [
     {
       "id": 101,
+      "familyId": 1,
       "title": "A new mechanical keyboard",
       "estimatedPrice": 120,
       "targetMemberId": 2,
@@ -14,12 +51,23 @@
       "targetMemberId": 3,
       "creationDate": "2025-11-09T10:36:54.968Z",
       "creatorId": 1,
-      "id": 102
+      "id": 102,
+      "familyId": 1
+    },
+    {
+      "familyId": 1,
+      "title": "test",
+      "estimatedPrice": 10,
+      "targetMemberId": 1,
+      "creatorId": 4,
+      "creationDate": "2025-12-06T16:15:01.457Z",
+      "id": 103
     }
   ],
   "purchasedGifts": [
     {
       "id": 201,
+      "familyId": 1,
       "name": "Espresso Machine",
       "totalPrice": 300,
       "store": "Amazon",
@@ -33,6 +81,7 @@
     },
     {
       "id": 202,
+      "familyId": 1,
       "name": "Board Game 'Dune'",
       "totalPrice": 60,
       "store": "CoolStuffInc",
@@ -56,7 +105,8 @@
         1,
         2
       ],
-      "id": 203
+      "id": 203,
+      "familyId": 1
     },
     {
       "name": "bluetooth speaker",
@@ -68,7 +118,8 @@
       "reimbursementMemberIds": [
         2
       ],
-      "id": 204
+      "id": 204,
+      "familyId": 1
     }
   ],
   "reimbursementStatus": [

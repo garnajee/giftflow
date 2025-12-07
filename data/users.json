@@ -3,17 +3,26 @@
     {
       "id": 1,
       "username": "Alice",
-      "password": "alice"
+      "password": "alice",
+      "isAdmin": false
     },
     {
       "id": 2,
       "username": "Bob",
-      "password": "bob"
+      "password": "bob",
+      "isAdmin": false
     },
     {
       "id": 3,
       "username": "Charlie",
-      "password": "charlie"
+      "password": "charlie",
+      "isAdmin": false
+    },
+    {
+      "id": 4,
+      "username": "Hector",
+      "password": "hector",
+      "isAdmin": true
     }
   ]
 }

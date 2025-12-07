@@ -10,6 +10,8 @@
   "header": {
     "home": "Home",
     "archives": "Archives",
+    "admin": "Admin",
+    "switchFamily": "Switch Family",
     "loggedInAs": "Logged in:",
     "logout": "Logout"
   },
@@ -30,7 +32,10 @@
   "giftCard": {
     "priceUndefined": "Price not set",
     "priceEstimated": "(estimated)",
-    "createdBy": "By {name} on {date}"
+    "createdBy": "By {name} on {date}",
+    "editPrice": "Edit Price",
+    "convertToPurchase": "Convert to Purchase",
+    "deleteIdea": "Delete Idea"
   },
   "purchasedCard": {
     "purchasedAt": "Purchased at <strong>{store}</strong> on {date}",
@@ -40,7 +45,7 @@
     "deleteGift": "Delete gift"
   },
   "reimbursement": {
-    "title": "Reimbursements ({amount} / person)",
+    "title": "Reimbursements",
     "tableHeaderMember": "Member",
     "tableHeaderStatus": "Status",
     "tableHeaderActions": "Actions",
@@ -63,6 +68,34 @@
     "backButton": "← Back",
     "giftsReceived_one": "gift received",
     "giftsReceived_other": "gifts received"
+  },
+  "familySelector": {
+    "title": "Select a Family",
+    "clickToEnter": "Click to enter"
+  },
+  "admin": {
+    "title": "Admin Dashboard",
+    "tabUsers": "Users",
+    "tabFamilies": "Families",
+    "addUser": "Add User",
+    "addFamily": "Add Family",
+    "manage": "Manage",
+    "edit": "Edit",
+    "id": "ID",
+    "username": "Username",
+    "password": "Password",
+    "isAdmin": "Admin",
+    "families": "Families",
+    "actions": "Actions",
+    "name": "Name",
+    "members": "Members",
+    "save": "Save",
+    "create": "Create",
+    "userTitle": "User",
+    "familyTitle": "Family",
+    "manageMembersTitle": "Manage Members for {name}",
+    "no": "No",
+    "yes": "Yes"
   },
   "modal": {
     "addTitle": "Add a Gift",

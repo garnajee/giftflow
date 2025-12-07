@@ -10,6 +10,8 @@
   "header": {
     "home": "Accueil",
     "archives": "Archives",
+    "admin": "Admin",
+    "switchFamily": "Changer de famille",
     "loggedInAs": "Connecté :",
     "logout": "Déconnexion"
   },
@@ -30,7 +32,10 @@
   "giftCard": {
     "priceUndefined": "Prix non défini",
     "priceEstimated": "(estimé)",
-    "createdBy": "Par {name} le {date}"
+    "createdBy": "Par {name} le {date}",
+    "editPrice": "Modifier le prix",
+    "convertToPurchase": "Convertir en achat",
+    "deleteIdea": "Supprimer l'idée"
   },
   "purchasedCard": {
     "purchasedAt": "Acheté chez <strong>{store}</strong> le {date}",
@@ -40,7 +45,7 @@
     "deleteGift": "Supprimer le cadeau"
   },
   "reimbursement": {
-    "title": "Remboursements ({amount} / personne)",
+    "title": "Remboursements",
     "tableHeaderMember": "Membre",
     "tableHeaderStatus": "Statut",
     "tableHeaderActions": "Actions",
@@ -63,6 +68,34 @@
     "backButton": "← Retour",
     "giftsReceived_one": "cadeau reçu",
     "giftsReceived_other": "cadeaux reçus"
+  },
+  "familySelector": {
+    "title": "Sélectionnez une famille",
+    "clickToEnter": "Cliquer pour entrer"
+  },
+  "admin": {
+    "title": "Dashboard Admin",
+    "tabUsers": "Utilisateurs",
+    "tabFamilies": "Familles",
+    "addUser": "Ajouter Utilisateur",
+    "addFamily": "Ajouter Famille",
+    "manage": "Gérer",
+    "edit": "Éditer",
+    "id": "ID",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "isAdmin": "Admin",
+    "families": "Familles",
+    "actions": "Actions",
+    "name": "Nom",
+    "members": "Membres",
+    "save": "Sauvegarder",
+    "create": "Créer",
+    "userTitle": "Utilisateur",
+    "familyTitle": "Famille",
+    "manageMembersTitle": "Gérer les membres pour {name}",
+    "no": "Non",
+    "yes": "Oui"
   },
   "modal": {
     "addTitle": "Ajouter un cadeau",
