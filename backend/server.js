@@ -281,7 +281,7 @@ app.post('/api/gifts/:id/revert-to-idea', async (req, res) => {
         const gId = parseInt(req.params.id);
         const gift = db.purchasedGifts.find(g => g.id === gId);
         if(!gift) return res.status(404).send();
-        const idea = { id: getNextId(db.giftIdeas), title: gift.name, estimatedPrice: gift.totalPrice, targetMemberId: gift.targetMemberId, creationDate: new Date().toISOString(), creatorId: gift.payerId, familyId: gift.familyId };
+        const idea = { id: getNextId(db.giftIdeas), title: gift.name, estimatedPrice: gift.totalPrice, comment: gift.comment || null, targetMemberId: gift.targetMemberId, creationDate: new Date().toISOString(), creatorId: gift.payerId, familyId: gift.familyId };
         db.giftIdeas.push(idea);
         db.purchasedGifts = db.purchasedGifts.filter(g => g.id !== gId);
         db.reimbursementStatus = db.reimbursementStatus.filter(s => s.giftId !== gId);

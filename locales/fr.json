@@ -40,6 +40,7 @@
   "purchasedCard": {
     "purchasedAt": "Acheté chez <strong>{store}</strong> le {date}",
     "paidBy": "Payé par : <strong>{name}</strong>",
+    "link": "Voir le lien",
     "editGift": "Modifier le cadeau",
     "revertToIdea": "Repasser en idée",
     "deleteGift": "Supprimer le cadeau"
@@ -105,11 +106,13 @@
     "typePurchase": "Un Achat Réel",
     "ideaName": "Nom de l'idée",
     "ideaPrice": "Prix estimé (optionnel)",
+    "comment": "Commentaire (optionnel)",
     "for": "Pour : <strong>{name}</strong>",
     "addIdeaBtn": "Ajouter l'Idée",
     "giftName": "Nom du cadeau",
     "giftPrice": "Prix total",
     "giftStore": "Enseigne / Site",
+    "giftLink": "Lien (optionnel)",
     "giftDate": "Date d'achat",
     "giftPayer": "Payé par",
     "giftParticipants": "Participants",

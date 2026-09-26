@@ -195,6 +195,16 @@ main {
   color: var(--text-light);
   margin-top: 0.5rem;
 }
+.gift-card .card-comment {
+  color: var(--text-light);
+  display: -webkit-box;
+  font-size: 0.9rem;
+  font-style: italic;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin-top: 0.25rem;
+  overflow: hidden;
+}
 .gift-card p {
   margin: 0.5rem 0;
 }

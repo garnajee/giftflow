@@ -45,6 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const findById = (coll, id) => coll.find(i => i.id === id);
     const formatCurrency = (amt) => new Intl.NumberFormat(currentLang, { style: 'currency', currency: 'EUR' }).format(amt);
     const formatDate = (date) => new Date(date).toLocaleDateString(currentLang);
+    const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    }[char]));
     
     const t = (key, params = {}) => {
         let text = key.split('.').reduce((o, i) => o?.[i], translations[currentLang]);
@@ -313,10 +320,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- CARDS ---
     function renderIdeaCard(i) {
         const creator = findById(DB.members, i.creatorId)?.username || '?';
+        const comment = i.comment?.trim();
         return `<div class="gift-card" data-idea-id="${i.id}">
             <h4>${i.title}<div class="card-actions"><button class="action-btn edit-price-btn" title="${t('giftCard.editPrice')}">✏️</button><button class="action-btn convert-btn" title="${t('giftCard.convertToPurchase')}">🛒</button><button class="action-btn delete-btn" title="${t('giftCard.deleteIdea')}">🗑️</button></div></h4>
             <div class="price-container">${i.estimatedPrice ? `<div class="price">${formatCurrency(i.estimatedPrice)} ${t('giftCard.priceEstimated')}</div>` : `<div class="price">${t('giftCard.priceUndefined')}</div>`}</div>
             <div class="meta">${t('giftCard.createdBy', {name: creator, date: formatDate(i.creationDate)})}</div>
+            ${comment ? `<div class="card-comment">${escapeHtml(comment)}</div>` : ''}
         </div>`;
     }
 
@@ -324,6 +333,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const payer = findById(DB.members, g.payerId)?.username || '?';
         const statuses = DB.reimbursementStatus.filter(s => s.giftId === g.id);
         const share = g.totalPrice / g.reimbursementMemberIds.length;
+        const comment = g.comment?.trim();
+        const link = g.link?.trim();
         return `<div class="gift-card" data-gift-id="${g.id}">
             <h4>${g.name}<div class="card-actions">
                 <button class="action-btn revert-to-idea-btn" title="${t('purchasedCard.revertToIdea')}">💡</button>
@@ -333,6 +344,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="price">${formatCurrency(g.totalPrice)}</div>
             <p>${t('purchasedCard.purchasedAt', {store: g.store, date: formatDate(g.purchaseDate)})}</p>
             <p>${t('purchasedCard.paidBy', {name: payer})}</p>
+            ${comment ? `<div class="card-comment">${escapeHtml(comment)}</div>` : ''}
+            ${link ? `<p><a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">${t('purchasedCard.link')}</a></p>` : ''}
             <table class="reimbursement-table">
                 <thead><tr><th>${t('reimbursement.tableHeaderMember')}</th><th>${t('reimbursement.tableHeaderStatus')}</th><th>${t('reimbursement.tableHeaderActions')}</th></tr></thead>
                 <tbody>${statuses.map(s => {
@@ -443,6 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderForm('purchase');
         addForm.querySelector('[name=name]').value = idea.title;
         if(idea.estimatedPrice) addForm.querySelector('[name=totalPrice]').value = idea.estimatedPrice;
+        if(idea.comment) addForm.querySelector('[name=comment]').value = idea.comment;
     }
 
     function openEditGiftModal(gift) {
@@ -453,6 +467,8 @@ document.addEventListener('DOMContentLoaded', () => {
         addForm.querySelector('[name=name]').value = gift.name;
         addForm.querySelector('[name=totalPrice]').value = gift.totalPrice;
         addForm.querySelector('[name=store]').value = gift.store;
+        addForm.querySelector('[name=link]').value = gift.link || '';
+        addForm.querySelector('[name=comment]').value = gift.comment || '';
         addForm.querySelector('[name=purchaseDate]').value = new Date(gift.purchaseDate).toISOString().slice(0,10);
         addForm.querySelector('[name=payerId]').value = gift.payerId;
         gift.reimbursementMemberIds.forEach(mid => { const c = addForm.querySelector(`input[value="${mid}"]`); if(c) c.checked=true; });
@@ -466,6 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (type === 'idea') {
             h = `<div class="input-group"><label>${t('modal.ideaName')}</label><input type="text" name="title" required></div>
                  <div class="input-group"><label>${t('modal.ideaPrice')}</label><input type="number" name="estimatedPrice" step="0.01"></div>
+                 <div class="input-group"><label>${t('modal.comment')}</label><textarea name="comment" rows="3"></textarea></div>
                  <input type="hidden" name="targetMemberId" value="${tm.id}"><p>${t('modal.for', {name: tm.username})}</p>
                  <button class="btn btn-primary submit-btn">${t('modal.addIdeaBtn')}</button>`;
         } else {
@@ -474,6 +491,8 @@ document.addEventListener('DOMContentLoaded', () => {
             h = `<div class="input-group"><label>${t('modal.giftName')}</label><input type="text" name="name" required></div>
                  <div class="input-group"><label>${t('modal.giftPrice')}</label><input type="number" name="totalPrice" step="0.01" required></div>
                  <div class="input-group"><label>${t('modal.giftStore')}</label><input type="text" name="store" required></div>
+                 <div class="input-group"><label>${t('modal.giftLink')}</label><input type="url" name="link"></div>
+                 <div class="input-group"><label>${t('modal.comment')}</label><textarea name="comment" rows="3"></textarea></div>
                  <div class="input-group"><label>${t('modal.giftDate')}</label><input type="date" name="purchaseDate" required value="${new Date().toISOString().slice(0,10)}"></div>
                  <div class="input-group"><label>${t('modal.giftPayer')}</label><select name="payerId">${opts}</select></div>
                  <div class="input-group"><label>${t('modal.giftParticipants')}</label><div class="checkbox-group">${chks}</div></div>
@@ -528,6 +547,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (type === 'idea') {
                 payload.title = fd.get('title');
                 payload.estimatedPrice = parseFloat(fd.get('estimatedPrice')) || null;
+                payload.comment = fd.get('comment')?.trim() || null;
                 payload.targetMemberId = state.viewingMemberId;
                 payload.creatorId = state.currentUser.id;
                 payload.creationDate = new Date().toISOString();
@@ -536,6 +556,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 payload.name = fd.get('name');
                 payload.totalPrice = parseFloat(fd.get('totalPrice'));
                 payload.store = fd.get('store');
+                payload.link = fd.get('link')?.trim() || null;
+                payload.comment = fd.get('comment')?.trim() || null;
                 payload.purchaseDate = new Date(fd.get('purchaseDate')).toISOString();
                 payload.payerId = parseInt(fd.get('payerId'));
                 payload.targetMemberId = state.viewingMemberId;
