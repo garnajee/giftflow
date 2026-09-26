@@ -5,7 +5,8 @@ const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+const publicDir = path.join(__dirname, 'public');
 app.use(express.json());
 
 const dataDir = '/data';
@@ -299,6 +300,21 @@ app.put('/api/status/:id', async (req, res) => {
         await writeDB(db);
         res.json(db.reimbursementStatus[idx]);
     } catch (e) { res.status(500).json({ message: "Error" }); }
+});
+
+// Keep API failures as JSON responses before enabling the SPA fallback.
+app.use('/api', (req, res) => {
+    res.status(404).json({ message: 'Not found' });
+});
+
+app.get('/config.js', (req, res) => {
+    const defaultLang = ['fr', 'en'].includes(process.env.DEFAULT_LANG) ? process.env.DEFAULT_LANG : 'fr';
+    res.type('application/javascript').send(`window.APP_CONFIG = { defaultLang: '${defaultLang}' };`);
+});
+
+app.use(express.static(publicDir));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(publicDir, 'index.html'));
 });
 
 app.listen(PORT, () => {

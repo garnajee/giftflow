@@ -98,7 +98,7 @@ The entire application is containerized with Docker, making deployment and manag
     -   Express.js
 -   **Infrastructure & Deployment**:
     -   Docker & Docker Compose
-    -   Nginx (as a web server and reverse proxy)
+    -   A single Express container serving both the frontend and API
 
 ## Getting Started
 
@@ -130,9 +130,9 @@ You need to have Docker and Docker Compose installed on your machine.
 
 4.  **Build and run the application:**
     ```bash
-    docker-compose up --build -d
+    docker compose -f docker-compose-local-build.yml up --build -d
     ```
-    This command builds the Docker images for the API and the Nginx frontend, then starts both services in detached mode.
+    This command builds and starts the GiftFlow container in detached mode.
 
 5.  **Access the application:**
     Open your web browser and navigate to `http://localhost:8080`.
@@ -140,7 +140,7 @@ You need to have Docker and Docker Compose installed on your machine.
 6.  **Stopping the application:**
     To stop the running containers, execute:
     ```bash
-    docker-compose down
+    docker compose down
     ```
 
 ### Docker Setup
@@ -177,7 +177,7 @@ Run:
 Start the application:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 
@@ -186,20 +186,18 @@ docker-compose up -d
 ```
 .
 ├── backend/
-│   ├── Dockerfile          # Instructions to build the Node.js API image
 │   ├── package.json
-│   └── server.js           # The Express API server
+│   └── server.js           # Serves the frontend and the Express API
 ├── data/
 │   ├── database.json       # Stores gifts and ideas (persistent via volume)
 │   └── users.json          # Stores members and credentials (persistent via volume)
 ├── locales/
 │   ├── en.json             # English translation file
 │   └── fr.json             # French translation file
-├── Dockerfile              # Instructions to build the Nginx frontend image
-├── docker-compose.yml      # Orchestrates the api and nginx services
-├── entrypoint.sh           # Script to inject environment variables at runtime
+├── Dockerfile              # Builds the single GiftFlow image
+├── docker-compose.yml      # Runs the published image
+├── docker-compose-local-build.yml
 ├── index.html
-├── nginx.conf
 ├── app.js
 └── style.css
 ```

@@ -1,18 +1,11 @@
 services:
-  api:
-    image: ghcr.io/garnajee/giftflow:backend
-    container_name: giftflow-api
+  giftflow:
+    image: ghcr.io/garnajee/giftflow:latest
+    container_name: giftflow
     restart: always
     volumes:
       - ./data:/data
-
-  nginx:
-    image: ghcr.io/garnajee/giftflow:frontend
-    container_name: giftflow-nginx
-    restart: always
     ports:
-      - "8080:80"
-    depends_on:
-      - api
+      - "8080:3000"
     environment:
       - DEFAULT_LANG=en

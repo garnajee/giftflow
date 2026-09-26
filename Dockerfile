@@ -1,15 +1,15 @@
-FROM nginx:alpine
+FROM node:22-alpine
 
-RUN rm /etc/nginx/conf.d/default.conf
+WORKDIR /usr/src/app
 
-COPY nginx.conf /etc/nginx/conf.d/
+COPY backend/package*.json ./
+RUN npm install --omit=dev
 
-COPY index.html style.css app.js /usr/share/nginx/html/
-COPY locales/ /usr/share/nginx/html/locales/
+COPY backend/server.js ./server.js
+COPY index.html style.css app.js ./public/
+COPY locales/ ./public/locales/
 
-COPY entrypoint.sh /
-RUN chmod +x /entrypoint.sh
+ENV PORT=3000
+EXPOSE 3000
 
-ENTRYPOINT ["/entrypoint.sh"]
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["node", "server.js"]

@@ -1,20 +1,12 @@
 services:
-  api:
+  giftflow:
     build:
-      context: ./backend
-    container_name: giftflow-api
+      context: .
+    container_name: giftflow
     restart: always
     volumes:
       - ./data:/data
-
-  nginx:
-    build:
-      context: .
-    container_name: giftflow-nginx
-    restart: always
     ports:
-      - "8080:80"
-    depends_on:
-      - api
+      - "8080:3000"
     environment:
       - DEFAULT_LANG=en
