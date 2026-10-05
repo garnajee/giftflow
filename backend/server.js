@@ -33,8 +33,9 @@ const authMiddleware = async (req, res, next) => {
     } catch (e) { res.status(500).json({ message: 'Auth error' }); }
 };
 
+const isAdminUser = (user) => user?.role === 'admin' || user?.isAdmin;
 const adminMiddleware = (req, res, next) => {
-    if (!req.user || !req.user.isAdmin) return res.status(403).json({ message: 'Admin required' });
+    if (!isAdminUser(req.user)) return res.status(403).json({ message: 'Admin required' });
     next();
 };
 
@@ -57,7 +58,7 @@ app.get('/api/family/:familyId/data', authMiddleware, async (req, res) => {
         const db = await readDB();
         const users = await readUsers();
         const isInFamily = db.userFamilyLinks.some(l => l.userId === req.user.id && l.familyId === fId);
-        if (!isInFamily && !req.user.isAdmin) return res.status(403).json({ message: "Forbidden" });
+        if (!isInFamily && !isAdminUser(req.user)) return res.status(403).json({ message: "Forbidden" });
         const memberIds = db.userFamilyLinks.filter(l => l.familyId === fId).map(l => l.userId);
         res.json({
             members: users.members.filter(m => memberIds.includes(m.id)),

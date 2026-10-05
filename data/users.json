@@ -4,24 +4,28 @@
       "id": 1,
       "username": "Alice",
       "password": "alice",
+      "role": "member",
       "isAdmin": false
     },
     {
       "id": 2,
       "username": "Bob",
       "password": "bob",
+      "role": "member",
       "isAdmin": false
     },
     {
       "id": 3,
       "username": "Charlie",
       "password": "charlie",
+      "role": "member",
       "isAdmin": false
     },
     {
       "id": 4,
       "username": "Hector",
       "password": "hector",
+      "role": "admin",
       "isAdmin": true
     }
   ]

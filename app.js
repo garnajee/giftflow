@@ -58,6 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
         for (const [k, v] of Object.entries(params)) text = text.replace(`{${k}}`, v);
         return text;
     };
+    const getUserRole = (user) => user?.role || (user?.isAdmin ? 'admin' : 'member');
+    const canManageAdmin = (user) => getUserRole(user) === 'admin';
+    const canViewArchives = (user) => ['admin', 'privileged'].includes(getUserRole(user));
 
     // Fonction pour appliquer les traductions sur le DOM actuel
     function applyTranslations() {
@@ -108,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 selectFamily(state.userFamilies[0].id);
             } else if (state.userFamilies.length > 1) {
                 switchView('familySelector');
-            } else if (state.currentUser.isAdmin) {
+            } else if (canManageAdmin(state.currentUser)) {
                 switchView('admin');
             } else {
                 alert("No family assigned.");
@@ -147,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         navLogo.onclick = goToDashboard;
         navArchives.onclick = (e) => {
             e.preventDefault();
-            if(!state.currentUser?.isAdmin) return;
+            if(!canViewArchives(state.currentUser)) return;
             state.appSubView = 'archives';
             state.selectedArchiveYear = null;
             switchView('app');
@@ -155,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         
         navSwitch.onclick = (e) => { e.preventDefault(); switchView('familySelector'); };
-        navAdmin.onclick = (e) => { e.preventDefault(); switchView('admin'); };
+        navAdmin.onclick = (e) => { e.preventDefault(); if(canManageAdmin(state.currentUser)) switchView('admin'); };
 
         addFab.onclick = () => openAddModal();
         closeModalBtn.onclick = closeModal;
@@ -174,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     selectFamily(state.userFamilies[0].id);
                 } else if (state.userFamilies.length > 1) {
                     switchView('familySelector');
-                } else if (state.currentUser.isAdmin) {
+                } else if (canManageAdmin(state.currentUser)) {
                     switchView('admin');
                 }
             } catch (e) { window.handleLogout(); }
@@ -207,6 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- VIEW MANAGER ---
     function switchView(view) {
+        if (view === 'admin' && !canManageAdmin(state.currentUser)) view = 'app';
         state.currentView = view;
         loginContainer.classList.remove('active');
         familyContainer.style.display = 'none';
@@ -214,8 +218,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Header Links Visibility
         if (state.currentUser) {
-            navAdmin.classList.toggle('hidden', !state.currentUser.isAdmin);
-            navArchives.classList.toggle('hidden', !state.currentUser.isAdmin);
+            navAdmin.classList.toggle('hidden', !canManageAdmin(state.currentUser));
+            navArchives.classList.toggle('hidden', !canViewArchives(state.currentUser));
             navSwitch.classList.toggle('hidden', state.userFamilies.length <= 1);
         }
 
@@ -289,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if(state.appSubView === 'archives') {
-            if(!state.currentUser.isAdmin) {
+            if(!canViewArchives(state.currentUser)) {
                 state.appSubView = 'dashboard';
                 renderApp();
                 return;
@@ -528,15 +532,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (adminAction) {
             try {
                 if(adminAction === 'addUser') {
+                    const role = fd.get('role') || 'member';
                     await apiFetch('/api/admin/users', { 
                         method: 'POST', 
-                        body: JSON.stringify({username: fd.get('u'), password: fd.get('p'), isAdmin: fd.get('a')==='on', familyIds: Array.from(document.querySelectorAll('input[name=fams]:checked')).map(c=>c.value) }) 
+                        body: JSON.stringify({username: fd.get('u'), password: fd.get('p'), role, isAdmin: role === 'admin', familyIds: Array.from(document.querySelectorAll('input[name=fams]:checked')).map(c=>c.value) }) 
                     });
                 }
                 if(adminAction === 'editUser') {
+                    const role = fd.get('role') || 'member';
                     await apiFetch(`/api/admin/users/${addForm.dataset.adminId}`, { 
                         method: 'PUT', 
-                        body: JSON.stringify({username: fd.get('u'), password: fd.get('p'), isAdmin: fd.get('a')==='on', familyIds: Array.from(document.querySelectorAll('input[name=fams]:checked')).map(c=>c.value) }) 
+                        body: JSON.stringify({username: fd.get('u'), password: fd.get('p'), role, isAdmin: role === 'admin', familyIds: Array.from(document.querySelectorAll('input[name=fams]:checked')).map(c=>c.value) }) 
                     });
                 }
               if(adminAction === 'addFam') {
@@ -625,10 +631,10 @@ function renderAdmin() {
         const p = document.getElementById('admin-panel');
         if(state.adminTab === 'users') {
             p.innerHTML = `<button class="btn btn-primary" onclick="window.admAddUser()">${t('admin.addUser')}</button>
-            <table class="reimbursement-table"><thead><tr><th>${t('admin.username')}</th><th>${t('admin.isAdmin')}</th><th>${t('admin.families')}</th><th>${t('admin.actions')}</th></tr></thead>
+            <table class="reimbursement-table"><thead><tr><th>${t('admin.username')}</th><th>${t('admin.role')}</th><th>${t('admin.families')}</th><th>${t('admin.actions')}</th></tr></thead>
             <tbody>${ADMIN_DB.users.map(u => {
                 const fams = ADMIN_DB.links.filter(l=>l.userId===u.id).map(l=>ADMIN_DB.families.find(f=>f.id===l.familyId)?.name).filter(Boolean).join(', ');
-                return `<tr><td>${u.username}</td><td>${u.isAdmin?t('admin.yes'):t('admin.no')}</td><td>${fams}</td><td><button class="btn btn-secondary" onclick="window.admEditUser(${u.id})">${t('admin.edit')}</button></td></tr>`;
+                return `<tr><td>${u.username}</td><td>${t(`admin.role_${getUserRole(u)}`)}</td><td>${fams}</td><td><button class="btn btn-secondary" onclick="window.admEditUser(${u.id})">${t('admin.edit')}</button></td></tr>`;
             }).join('')}</tbody></table>`;
         } else {
             p.innerHTML = `<button class="btn btn-primary" onclick="window.admAddFam()">${t('admin.addFamily')}</button>
@@ -653,7 +659,7 @@ function renderAdmin() {
     
     window.admAddUser = () => {
         const fams = ADMIN_DB.families.map(f => `<label><span>${f.name}</span><input type="checkbox" name="fams" value="${f.id}"></label>`).join('');
-        openModal(t('admin.addUser'), `<div class="input-group"><label>${t('admin.username')}</label><input name="u" required></div><div class="input-group"><label>${t('admin.password')}</label><input name="p" required></div><div class="input-group"><label>${t('admin.isAdmin')}</label><input type="checkbox" name="a"></div><div class="input-group"><label>${t('admin.families')}</label><div class="checkbox-group">${fams}</div></div><button class="btn btn-primary submit-btn">${t('admin.save')}</button>`);
+        openModal(t('admin.addUser'), `<div class="input-group"><label>${t('admin.username')}</label><input name="u" required></div><div class="input-group"><label>${t('admin.password')}</label><input name="p" required></div><div class="input-group"><label>${t('admin.role')}</label><select name="role"><option value="member">${t('admin.role_member')}</option><option value="privileged">${t('admin.role_privileged')}</option><option value="admin">${t('admin.role_admin')}</option></select></div><div class="input-group"><label>${t('admin.families')}</label><div class="checkbox-group">${fams}</div></div><button class="btn btn-primary submit-btn">${t('admin.save')}</button>`);
         addForm.dataset.adminAction = 'addUser';
     };
     
@@ -663,7 +669,7 @@ function renderAdmin() {
             const has = ADMIN_DB.links.some(l=>l.userId===id && l.familyId===f.id);
             return `<label><span>${f.name}</span><input type="checkbox" name="fams" value="${f.id}" ${has?'checked':''}></label>`;
         }).join('');
-        openModal(t('admin.edit'), `<div class="input-group"><label>${t('admin.username')}</label><input name="u" value="${u.username}" required></div><div class="input-group"><label>${t('admin.password')}</label><input name="p" value="${u.password}" required></div><div class="input-group"><label>${t('admin.isAdmin')}</label><input type="checkbox" name="a" ${u.isAdmin?'checked':''}></div><div class="input-group"><label>${t('admin.families')}</label><div class="checkbox-group">${fams}</div></div><button class="btn btn-primary submit-btn">${t('admin.save')}</button>`);
+        openModal(t('admin.edit'), `<div class="input-group"><label>${t('admin.username')}</label><input name="u" value="${u.username}" required></div><div class="input-group"><label>${t('admin.password')}</label><input name="p" value="${u.password}" required></div><div class="input-group"><label>${t('admin.role')}</label><select name="role"><option value="member" ${getUserRole(u)==='member'?'selected':''}>${t('admin.role_member')}</option><option value="privileged" ${getUserRole(u)==='privileged'?'selected':''}>${t('admin.role_privileged')}</option><option value="admin" ${getUserRole(u)==='admin'?'selected':''}>${t('admin.role_admin')}</option></select></div><div class="input-group"><label>${t('admin.families')}</label><div class="checkbox-group">${fams}</div></div><button class="btn btn-primary submit-btn">${t('admin.save')}</button>`);
         addForm.dataset.adminAction = 'editUser'; addForm.dataset.adminId = id;
     };
     
