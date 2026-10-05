@@ -6,6 +6,6 @@ services:
     volumes:
       - ./data:/data
     ports:
-      - "8080:3000"
+      - "7012:3000"
     environment:
       - DEFAULT_LANG=en
