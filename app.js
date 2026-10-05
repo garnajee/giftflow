@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- UTILS ---
     const findById = (coll, id) => coll.find(i => i.id === id);
     const formatCurrency = (amt) => new Intl.NumberFormat(currentLang, { style: 'currency', currency: 'EUR' }).format(amt);
-    const formatDate = (date) => new Date(date).toLocaleDateString(currentLang);
     const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
         '&': '&amp;',
         '<': '&lt;',
@@ -146,7 +145,14 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         navDashboard.onclick = goToDashboard;
         navLogo.onclick = goToDashboard;
-        navArchives.onclick = (e) => { e.preventDefault(); state.appSubView = 'archives'; state.selectedArchiveYear = null; switchView('app'); renderApp(); };
+        navArchives.onclick = (e) => {
+            e.preventDefault();
+            if(!state.currentUser?.isAdmin) return;
+            state.appSubView = 'archives';
+            state.selectedArchiveYear = null;
+            switchView('app');
+            renderApp();
+        };
         
         navSwitch.onclick = (e) => { e.preventDefault(); switchView('familySelector'); };
         navAdmin.onclick = (e) => { e.preventDefault(); switchView('admin'); };
@@ -209,6 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Header Links Visibility
         if (state.currentUser) {
             navAdmin.classList.toggle('hidden', !state.currentUser.isAdmin);
+            navArchives.classList.toggle('hidden', !state.currentUser.isAdmin);
             navSwitch.classList.toggle('hidden', state.userFamilies.length <= 1);
         }
 
@@ -282,6 +289,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if(state.appSubView === 'archives') {
+            if(!state.currentUser.isAdmin) {
+                state.appSubView = 'dashboard';
+                renderApp();
+                return;
+            }
             navArchives.classList.add('active');
             const curYear = new Date().getFullYear();
             const past = DB.purchasedGifts.filter(g => new Date(g.purchaseDate).getFullYear() < curYear);
@@ -321,11 +333,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderIdeaCard(i) {
         const creator = findById(DB.members, i.creatorId)?.username || '?';
         const comment = i.comment?.trim();
+        const link = i.link?.trim();
         return `<div class="gift-card" data-idea-id="${i.id}">
-            <h4>${i.title}<div class="card-actions"><button class="action-btn edit-price-btn" title="${t('giftCard.editPrice')}">✏️</button><button class="action-btn convert-btn" title="${t('giftCard.convertToPurchase')}">🛒</button><button class="action-btn delete-btn" title="${t('giftCard.deleteIdea')}">🗑️</button></div></h4>
+            <h4>${escapeHtml(i.title)}<div class="card-actions"><button class="action-btn edit-idea-btn" title="${t('giftCard.editIdea')}">✏️</button><button class="action-btn convert-btn" title="${t('giftCard.convertToPurchase')}">🛒</button><button class="action-btn delete-btn" title="${t('giftCard.deleteIdea')}">🗑️</button></div></h4>
             <div class="price-container">${i.estimatedPrice ? `<div class="price">${formatCurrency(i.estimatedPrice)} ${t('giftCard.priceEstimated')}</div>` : `<div class="price">${t('giftCard.priceUndefined')}</div>`}</div>
-            <div class="meta">${t('giftCard.createdBy', {name: creator, date: formatDate(i.creationDate)})}</div>
+            <div class="meta">${t('giftCard.createdBy', {name: escapeHtml(creator)})}</div>
             ${comment ? `<div class="card-comment">${escapeHtml(comment)}</div>` : ''}
+            ${link ? `<p><a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">${t('giftCard.link')}</a></p>` : ''}
         </div>`;
     }
 
@@ -342,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <button class="action-btn delete-btn" title="${t('purchasedCard.deleteGift')}">🗑️</button>
             </div></h4>
             <div class="price">${formatCurrency(g.totalPrice)}</div>
-            <p>${t('purchasedCard.purchasedAt', {store: g.store, date: formatDate(g.purchaseDate)})}</p>
+            <p>${t('purchasedCard.purchasedAt', {store: escapeHtml(g.store)})}</p>
             <p>${t('purchasedCard.paidBy', {name: payer})}</p>
             ${comment ? `<div class="card-comment">${escapeHtml(comment)}</div>` : ''}
             ${link ? `<p><a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">${t('purchasedCard.link')}</a></p>` : ''}
@@ -403,17 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const iId = parseInt(card.dataset.ideaId);
         const gId = parseInt(card.dataset.giftId);
 
-        if(e.target.closest('.edit-price-btn')) {
-            const i = findById(DB.giftIdeas, iId);
-            card.querySelector('.price-container').innerHTML = `<input type="number" class="price-input" step="0.01" value="${i.estimatedPrice||''}">`;
-            card.querySelector('.card-actions').innerHTML = `<button class="action-btn save-p">✅</button><button class="action-btn cancel-p">❌</button>`;
-        }
-        if(e.target.closest('.save-p')) {
-            const v = parseFloat(card.querySelector('.price-input').value) || null;
-            await apiFetch(`/api/ideas/${iId}`, { method: 'PUT', body: JSON.stringify({ estimatedPrice: v }) });
-            refresh();
-        }
-        if(e.target.closest('.cancel-p')) refresh();
+        if(e.target.closest('.edit-idea-btn')) openEditIdeaModal(findById(DB.giftIdeas, iId));
         if(e.target.closest('.convert-btn')) openAddModalForConversion(findById(DB.giftIdeas, iId));
         if(e.target.closest('.edit-gift-btn')) openEditGiftModal(findById(DB.purchasedGifts, gId));
         if(e.target.closest('.revert-to-idea-btn')) { if(confirm(t('alerts.confirmRevertIdea'))) { await apiFetch(`/api/gifts/${gId}/revert-to-idea`, { method: 'POST' }); refresh(); } }
@@ -442,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.querySelector('#modal-title').textContent = t('modal.addTitle');
         modalTypeSelector.style.display = 'block';
         addForm.innerHTML = ''; addForm.classList.remove('visible');
-        delete addForm.dataset.adminAction; delete addForm.dataset.convertId; delete addForm.dataset.editGiftId;
+        delete addForm.dataset.adminAction; delete addForm.dataset.convertId; delete addForm.dataset.editIdeaId; delete addForm.dataset.editGiftId;
         modalTypeSelector.querySelectorAll('.btn').forEach(b => {
             b.classList.remove('active');
             b.onclick = () => { renderForm(b.dataset.formType); b.classList.add('active'); };
@@ -456,7 +460,20 @@ document.addEventListener('DOMContentLoaded', () => {
         renderForm('purchase');
         addForm.querySelector('[name=name]').value = idea.title;
         if(idea.estimatedPrice) addForm.querySelector('[name=totalPrice]').value = idea.estimatedPrice;
+        if(idea.link) addForm.querySelector('[name=link]').value = idea.link;
         if(idea.comment) addForm.querySelector('[name=comment]').value = idea.comment;
+    }
+
+    function openEditIdeaModal(idea) {
+        window.openAddModal(); modalTypeSelector.style.display='none';
+        modal.querySelector('#modal-title').textContent = t('modal.editIdeaTitle');
+        addForm.dataset.editIdeaId = idea.id;
+        renderForm('idea', true);
+        addForm.querySelector('[name=title]').value = idea.title;
+        addForm.querySelector('[name=estimatedPrice]').value = idea.estimatedPrice || '';
+        addForm.querySelector('[name=link]').value = idea.link || '';
+        addForm.querySelector('[name=comment]').value = idea.comment || '';
+        addForm.querySelector('.submit-btn').textContent = t('modal.editIdeaBtn');
     }
 
     function openEditGiftModal(gift) {
@@ -482,9 +499,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (type === 'idea') {
             h = `<div class="input-group"><label>${t('modal.ideaName')}</label><input type="text" name="title" required></div>
                  <div class="input-group"><label>${t('modal.ideaPrice')}</label><input type="number" name="estimatedPrice" step="0.01"></div>
+                 <div class="input-group"><label>${t('modal.ideaLink')}</label><input type="url" name="link"></div>
                  <div class="input-group"><label>${t('modal.comment')}</label><textarea name="comment" rows="3"></textarea></div>
                  <input type="hidden" name="targetMemberId" value="${tm.id}"><p>${t('modal.for', {name: tm.username})}</p>
-                 <button class="btn btn-primary submit-btn">${t('modal.addIdeaBtn')}</button>`;
+                 <button class="btn btn-primary submit-btn">${isEdit ? t('modal.editIdeaBtn') : t('modal.addIdeaBtn')}</button>`;
         } else {
             const opts = DB.members.map(m => `<option value="${m.id}">${m.username}</option>`).join('');
             const chks = DB.members.map(m => `<label><span>${m.username}</span><input type="checkbox" name="mids" value="${m.id}"></label>`).join('');
@@ -547,11 +565,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (type === 'idea') {
                 payload.title = fd.get('title');
                 payload.estimatedPrice = parseFloat(fd.get('estimatedPrice')) || null;
+                payload.link = fd.get('link')?.trim() || null;
                 payload.comment = fd.get('comment')?.trim() || null;
-                payload.targetMemberId = state.viewingMemberId;
-                payload.creatorId = state.currentUser.id;
-                payload.creationDate = new Date().toISOString();
-                await apiFetch('/api/ideas', { method: 'POST', body: JSON.stringify(payload) });
+                if(addForm.dataset.editIdeaId) {
+                    await apiFetch(`/api/ideas/${addForm.dataset.editIdeaId}`, { method: 'PUT', body: JSON.stringify(payload) });
+                } else {
+                    payload.targetMemberId = state.viewingMemberId;
+                    payload.creatorId = state.currentUser.id;
+                    payload.creationDate = new Date().toISOString();
+                    await apiFetch('/api/ideas', { method: 'POST', body: JSON.stringify(payload) });
+                }
             } else {
                 payload.name = fd.get('name');
                 payload.totalPrice = parseFloat(fd.get('totalPrice'));

@@ -212,7 +212,8 @@ app.put('/api/ideas/:id', async (req, res) => {
         const db = await readDB();
         const idx = db.giftIdeas.findIndex(i => i.id === parseInt(req.params.id));
         if(idx === -1) return res.status(404).send();
-        db.giftIdeas[idx] = { ...db.giftIdeas[idx], ...req.body };
+        const { id, familyId, targetMemberId, creatorId, creationDate, ...updates } = req.body;
+        db.giftIdeas[idx] = { ...db.giftIdeas[idx], ...updates };
         await writeDB(db);
         res.json(db.giftIdeas[idx]);
     } catch (e) { res.status(500).json({ message: "Error" }); }
@@ -251,7 +252,8 @@ app.put('/api/gifts/:id', async (req, res) => {
         const gId = parseInt(req.params.id);
         const idx = db.purchasedGifts.findIndex(g => g.id === gId);
         if(idx === -1) return res.status(404).send();
-        const updated = { ...db.purchasedGifts[idx], ...req.body };
+        const { id, familyId, ...updates } = req.body;
+        const updated = { ...db.purchasedGifts[idx], ...updates };
         db.purchasedGifts[idx] = updated;
         db.reimbursementStatus = db.reimbursementStatus.filter(s => s.giftId !== gId);
         let nextStatusId = getNextId(db.reimbursementStatus);
@@ -282,7 +284,7 @@ app.post('/api/gifts/:id/revert-to-idea', async (req, res) => {
         const gId = parseInt(req.params.id);
         const gift = db.purchasedGifts.find(g => g.id === gId);
         if(!gift) return res.status(404).send();
-        const idea = { id: getNextId(db.giftIdeas), title: gift.name, estimatedPrice: gift.totalPrice, comment: gift.comment || null, targetMemberId: gift.targetMemberId, creationDate: new Date().toISOString(), creatorId: gift.payerId, familyId: gift.familyId };
+        const idea = { id: getNextId(db.giftIdeas), title: gift.name, estimatedPrice: gift.totalPrice, link: gift.link || null, comment: gift.comment || null, targetMemberId: gift.targetMemberId, creationDate: new Date().toISOString(), creatorId: gift.payerId, familyId: gift.familyId };
         db.giftIdeas.push(idea);
         db.purchasedGifts = db.purchasedGifts.filter(g => g.id !== gId);
         db.reimbursementStatus = db.reimbursementStatus.filter(s => s.giftId !== gId);
